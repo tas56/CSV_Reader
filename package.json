@@ -1,0 +1,24 @@
+{
+  "name": "csv_reader",
+  "version": "1.0.0",
+  "description": "CSV Reader",
+  "main": "src/Index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node src/Index.js",
+    "coverage": "jest --coverage",
+    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
+  },
+  "keywords": [],
+  "author": "Thomas Semiz",
+  "email": "tas56@njit.edu",
+  "license": "ISC",
+  "dependencies": {
+    "csv": "^5.3.2",
+    "csv-parse": "latest"
+  },
+  "devDependencies": {
+    "coveralls": "^3.1.0",
+    "jest": "^25.5.4"
+  }
+}
