@@ -1,10 +1,8 @@
 const parse = require('csv-parse')
 const fs = require('fs');
-const City = require('models/City')
-let csvFile = '../data/worldcities.csv';
-const output = []
+const output = [];
 
-class ReadStream {
+class CsvReader {
 
     static output = [];
 
@@ -16,62 +14,39 @@ class ReadStream {
     }
 
     static Create(csvFile,model){
-        return new ReadStream(csvFile,model);
+        return new CsvReader(csvFile,model);
     }
 
     static AddOutput(record){
-        this.output.push(record);
+        CsvReader.output.push(record);
     }
 
-    CreateReadStream(){
-        fs.createReadStream(this.csvFile)
+    inputStream (csvFile, Model){
+        fs.createReadStream(csvFile)
             .pipe(parse({
-            columns: true,
-            delimiter: ',',
-            trim: true,
-            skip_empty_lines: true
-        })
-            .on('readable', function(){
-                let record
-                while (record = this.read()) {
-                    console.log(record)
-                    let city = this.model.create(record);
-                    this.AddOutput(record)
-                }
+                columns: true,
+                delimiter: ',',
+                trim: true,
+                skip_empty_lines: true
             })
-            // When we are done, test that the parsed output matched what expected
-            .on('end', function(){
+                .on('readable', function(){
+                    let record
+                    while (record = this.read()) {
+                        console.log(record)
+                        let city = new Model(record)
+                        output.push(record)
+                    }
 
-              //  console.log(output);
+                })
+                // When we are done, test that the parsed output matched what expected
+                .on('end', function(){
 
-            }));
-
+                    //console.log(output);
+                }));
     }
 
 
 }
 
 
-
-
-// fs.createReadStream(csvFile)
-//     .pipe(parse({
-//     columns: true,
-//     delimiter: ',',
-//     trim: true,
-//     skip_empty_lines: true
-// })
-//     .on('readable', function(){
-//         let record
-//         while (record = this.read()) {
-//             console.log(record)
-//             let city = City.create(record);
-//             output.push(record)
-//         }
-//     })
-//     // When we are done, test that the parsed output matched what expected
-//     .on('end', function(){
-//
-//       //  console.log(output);
-//
-//     }));
+module.exports = CsvReader;
