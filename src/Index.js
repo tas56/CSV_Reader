@@ -33,7 +33,7 @@ class CsvReader {
                     let record
                     while (record = this.read()) {
                         console.log(record)
-                        let city = new Model(record)
+                        let model = new Model(record)
                         output.push(record)
                     }
 
